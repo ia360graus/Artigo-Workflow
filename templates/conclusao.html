@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conclusão</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@12/dist/markdown-it.min.js"></script> <!-- Incluindo markdown-it -->
+    <script src="static/main.js"></script>
+</head>
+
+<body>
+    <h2>Conclusão das Etapas</h2>
+    <label for="tituloPrincipal">Título Principal:</label>
+    <input type="text" id="tituloPrincipal" oninput="atualizarSlug(this.value);">
+
+    <label for="metaDescricao">Meta Descrição:</label>
+    <textarea id="metaDescricao" rows="4" cols="50"></textarea>
+
+    <label for="slug">Slug:</label>
+    <input type="text" id="slug">
+
+    <h3>Edição do Artigo</h3>
+    <textarea name="editor1" id="htmlEditor"></textarea>
+
+    <button onclick="publishToWordpress()">Publicar no WordPress</button>
+
+
+    <script>
+        window.onload = function() {
+            const tituloH1 = localStorage.getItem('tituloH1');
+            if (tituloH1) {
+                document.getElementById('tituloPrincipal').value = tituloH1;
+                atualizarSlug(tituloH1);
+            }
+
+            const palavraChave = localStorage.getItem('palavraChave');
+            if (palavraChave) {
+                document.getElementById('slug').value = criarSlug(palavraChave);
+            }
+
+            // Inicializa o CKEditor com altura definida e estilo personalizado para o tamanho da fonte
+            CKEDITOR.replace('htmlEditor', {
+                height: '600px',
+                contentsCss: 'body { font-size: 18px; }'
+            });
+        }
+
+        // Inicializa markdown-it
+        const md = window.markdownit();
+
+        CKEDITOR.on('instanceReady', function(evt) {
+            const editor = evt.editor;
+
+            editor.on('beforePaste', function(event) {
+                // Usando o 'getData()' para obter os dados diretamente do evento de colagem
+                let clipboardData = event.data.dataTransfer.getData('text');
+
+                // Converta o conteúdo colado de Markdown para HTML
+                const htmlContent = md.render(clipboardData);
+
+                // Interrompa o evento de colagem original
+                event.cancel();
+
+                // Insira o conteúdo convertido diretamente no editor
+                editor.insertHtml(htmlContent);
+            });
+        });
+
+        function atualizarSlug(string) {
+            console.log("Entrando na função atualizarSlug com string:", string);
+            const slug = criarSlug(string);
+            console.log("Slug gerado:", slug);
+            document.getElementById('slug').value = slug;
+        }
+
+        function salvarPalavraChave(value) {
+            localStorage.setItem('palavraChave', value);
+        }
+    </script>
+</body>
+
+</html>
