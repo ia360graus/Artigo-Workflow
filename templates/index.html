@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Prompt</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+</head>
+
+<body>
+    <h2>Gerador de Prompt</h2>
+
+    <!-- Etapa 1 -->
+    <h3>Etapa 1: Coletar Informações</h3>
+    <label for="palavraChave">Palavra-chave Principal:</label>
+    <input type="text" id="palavraChave">
+    <label for="urlsConcorrentes">URLs dos Concorrentes:</label>
+    <textarea id="urlsConcorrentes" rows="5"></textarea>
+    <button onclick="copiarPrompt('promptEsboco', this)">Copiar Prompt de Geração do Esboço</button>
+    <button onclick="copiarPrompt('promptLSI', this)">Copiar Prompt Palavras-chave LSI e NLP</button>
+
+    <!-- Etapa 2 -->
+    <h3>Etapa 2: Inserir Palavras-chave</h3>
+    <label for="palavrasLSINLP">Palavras-chave LSI e NLP:</label>
+    <textarea id="palavrasLSINLP" rows="5"></textarea>
+    
+    
+    <h3>Insira o Esboço do Artigo</h3>
+    <label for="esboco">Cole o esboço do artigo (H1, H2, H3):</label>
+    <textarea id="esboco" rows="10"></textarea>
+    <button onclick="gerarPrompts(this)">Gerar Prompts para Escrever Seções</button>
+    <div id="promptsContainer"></div>
+
+    <!-- Etapa 3 -->
+    <h3>Etapa 3: Gerar Artigo</h3>
+    <button onclick="copiarPrompt('promptArtigo', this)">Copiar Prompt de Escrita do Artigo</button>
+
+    <!-- Etapa 4: Gerar Introdução -->
+    <h3>Etapa 4: Gerar Introdução</h3>
+    <button onclick="copiarPromptIntroducao(this)">Copie o prompt para a Introdução</button>
+
+    <h3>Etapa 6: Gerar Conclusão</h3>
+    <button onclick="copiarPromptConclusao(this)">Copie o prompt para a Conclusão</button>
+
+    <h3>Etapa 7: Gerar Meta Descrição</h3>
+    <button onclick="copiarPromptMetaDescricao(this)">Copie o prompt para a Meta Descrição</button>
+
+    <button class="large-button" onclick="concluirEtapas()">Concluir Etapas</button>
+
+    <div id="mensagemCopiado" style="display: none;">
+        Prompt copiado com sucesso!
+    </div>
+
+    <div id="mensagemErro" style="display: none;">
+        Erro!
+    </div>
+</body>
+</html>
